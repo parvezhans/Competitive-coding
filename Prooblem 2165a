@@ -1,0 +1,59 @@
+//Problem 2165a
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<long long> a(n);
+    long long max_val = -1;
+    int max_idx = -1;
+
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+        if (a[i] > max_val) {
+            max_val = a[i];
+            max_idx = i;
+        }
+    }
+
+    vector<long long> b;
+    for (int i = 0; i < n; i++) {
+        b.push_back(a[(max_idx + i) % n]);
+    }
+
+    long long total_cost = 0;
+    vector<long long> s;
+
+    for (long long x : b) {
+        while (!s.empty() && x > s.back()) {
+            long long mid = s.back();
+            s.pop_back();
+            if (!s.empty()) {
+                total_cost += min(s.back(), x);
+            }
+        }
+        s.push_back(x);
+    }
+
+    for (int i = s.size() - 1; i > 0; i--) {
+        total_cost += s[i - 1];
+    }
+
+    cout << total_cost << "\n";
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
